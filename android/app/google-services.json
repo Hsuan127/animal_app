@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "956150016335",
+    "firebase_url": "https://helping-pets-and-me-default-rtdb.firebaseio.com",
+    "project_id": "helping-pets-and-me",
+    "storage_bucket": "helping-pets-and-me.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956150016335:android:bd9da38c223ed95cbdfd3a",
+        "android_client_info": {
+          "package_name": "com.Company.Myproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956150016335-8tie7453t058ufgk4m9jm0hculupc748.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Company.Myproject",
+            "certificate_hash": "2d453eb7f086db5db2d04296fb71f44b254f8940"
+          }
+        },
+        {
+          "client_id": "956150016335-ik5d0jeqch113r6sn5vs5fgb3lsicso8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsbeHJcRrMtwrxDCGwABqmlrYDTG5f3uU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956150016335-ik5d0jeqch113r6sn5vs5fgb3lsicso8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956150016335:android:0e556d9ac22e81bdbdfd3a",
+        "android_client_info": {
+          "package_name": "com.example.animal_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956150016335-ik5d0jeqch113r6sn5vs5fgb3lsicso8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsbeHJcRrMtwrxDCGwABqmlrYDTG5f3uU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956150016335-ik5d0jeqch113r6sn5vs5fgb3lsicso8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956150016335:android:777ab834f910971abdfd3a",
+        "android_client_info": {
+          "package_name": "com.mynewapp.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956150016335-ik5d0jeqch113r6sn5vs5fgb3lsicso8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsbeHJcRrMtwrxDCGwABqmlrYDTG5f3uU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956150016335-ik5d0jeqch113r6sn5vs5fgb3lsicso8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
