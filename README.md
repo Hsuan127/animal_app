@@ -1,4 +1,4 @@
-# graduation_animal_app
+# animal_app
 
 A new Flutter project.
 
