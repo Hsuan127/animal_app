@@ -20,6 +20,7 @@ class _RecordPageState extends State<RecordPage>{
     return Scaffold(
       appBar: AppBar(
         title: Text('紀錄'),
+        centerTitle: true,
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
