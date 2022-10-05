@@ -1,23 +1,34 @@
+import 'package:animal_app/TTM/TTMDoctor.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../MM/MM.dart';
+import '../TTM/TTMItem.dart';
+import '../TTM/TTMUser.dart';
+
 // void main() {
 //   runApp(DoctorPage());
 // }
 
 class AddDoctorPage extends StatelessWidget {
-  const AddDoctorPage({Key? key}) : super(key : key);
+  const AddDoctorPage( this._user , this.item , this._doctor , {Key? key}) : super(key : key);
   static const String _title = '新增紀錄';
+
+
+  final TTMUser _user ;
+  final TTMItem item ;
+  final TTMDoctor? _doctor ;
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
       home: new Scaffold(
-        body: new AddDoctor(),
+        body: new AddDoctor( this._user , this.item , this._doctor ),
       )
 
     );
@@ -27,13 +38,22 @@ class AddDoctorPage extends StatelessWidget {
 
 class AddDoctor extends StatefulWidget {
   //const AddDoctor({Key? key}) : super(key : key);
+  AddDoctor( this.user , this.item , this._doctor , );
+
+  final TTMUser user ;
+  final TTMItem item ;
+  final TTMDoctor? _doctor ;
+
+
   @override
   State<StatefulWidget> createState() {
-    return _AddDoctor();
+    return _AddDoctor(this.user , this.item);
   }
 }
 
 class _AddDoctor extends State<AddDoctor> {
+
+
 
   final TextEditingController _hospitalController = TextEditingController();
   final TextEditingController _problemController = TextEditingController();
@@ -44,6 +64,12 @@ class _AddDoctor extends State<AddDoctor> {
   final FocusNode _problemFocusNode = FocusNode();
   final FocusNode _dateFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
+
+
+  _AddDoctor( this.user , this.item );
+
+  final TTMUser user ;
+  final TTMItem item ;
   // Map<String, dynamic> _editTodo = {
   //   'type': '',
   //   'expense': '',
@@ -51,13 +77,14 @@ class _AddDoctor extends State<AddDoctor> {
   //   'description':'',
   //   'done': false,
   // };
-  _nextFocus(FocusNode focusNode) {
-    FocusScope.of(context).requestFocus(focusNode);
-  }
-  _submitForm() {
-    Scaffold.of(context).showSnackBar(SnackBar(content:
-    Text('紀錄已儲存！')));
-  }
+  // _nextFocus(FocusNode focusNode) {
+  //
+  //   FocusScope.of(context).requestFocus(focusNode);
+  // }
+  // _submitForm() {
+  //   Scaffold.of(context).showSnackBar(SnackBar(content:
+  //   Text('紀錄已儲存！')));
+  // }
 
   @override
   void initState() {
@@ -128,6 +155,7 @@ class _AddDoctor extends State<AddDoctor> {
                               flex: 3,
                               child: FormBuilderTextField(
                                 name: 'hospital',
+                                textInputAction: TextInputAction.next ,
                                 focusNode: _hospitalFocusNode,
                                 onSubmitted: (String ?value) {
                                   //Do anything with value
@@ -151,6 +179,8 @@ class _AddDoctor extends State<AddDoctor> {
                                   //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
                                 ),
 
+                                  controller : _hospitalController ,
+                                keyboardType: TextInputType.text,
                               ),
                             ),
 
@@ -170,6 +200,7 @@ class _AddDoctor extends State<AddDoctor> {
                               flex: 3,
                               child: FormBuilderTextField(
                                 name: 'problem',
+                                textInputAction: TextInputAction.next ,
                                 focusNode: _problemFocusNode,
                                 onSubmitted: (String ?value) {
                                   //Do anything with value
@@ -189,9 +220,10 @@ class _AddDoctor extends State<AddDoctor> {
                                 ),
                                 controller: _problemController,
                                 keyboardType: TextInputType.multiline,
+                                /*
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
-                                ],
+                                ],*/
                               ),
 
                             ),
@@ -213,7 +245,10 @@ class _AddDoctor extends State<AddDoctor> {
                               flex: 3,
                               child: FormBuilderDateTimePicker(
                                 name: 'date',
+                                initialDate: DateTime.now(),
+                                initialValue: DateTime.now(),
                                 inputType: InputType.date,
+                                textInputAction: TextInputAction.next ,
                                 focusNode: _dateFocusNode,
                                 onFieldSubmitted: (DateTime ?value) {
                                   //Do anything with value
@@ -277,10 +312,11 @@ class _AddDoctor extends State<AddDoctor> {
                             Expanded(
                               flex: 3,
                               child: TextFormField(
+                                textInputAction: TextInputAction.done ,
                                 focusNode: _descriptionFocusNode,
                                 onFieldSubmitted: (String value) {
                                   //Do anything with value
-                                  _submitForm();
+                                //  _submitForm();
                                 },
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.symmetric(
@@ -295,8 +331,8 @@ class _AddDoctor extends State<AddDoctor> {
                                 ),
                                 keyboardType: TextInputType.multiline,
                                 maxLines: 5,
-                                //expands: true,
-                              ),
+                                controller: _descriptionController,
+                                ),
                             ),
 
 
@@ -309,10 +345,13 @@ class _AddDoctor extends State<AddDoctor> {
                         // ),
                         ElevatedButton(
                           onPressed: () {
+                          //  _formKey.
+                            _onSave();
+                            /*
                             if (_formKey.currentState!.validate()){
                               _formKey.currentState!.save();
                               _formKey.currentState!.reset();
-                            }
+                            }*/
 
                           },
                           child: const Text('送出', style: TextStyle(fontSize: 20),
@@ -334,5 +373,33 @@ class _AddDoctor extends State<AddDoctor> {
     );
 
 
+  }
+
+  Future<void> _onSave() async
+  {
+
+    try
+    {
+      //   final TextEditingController _hospitalController = TextEditingController();
+      // 醫院
+      if( _hospitalController.text.isEmpty )
+        throw "未輸入醫院" ;
+      if( _problemController.text.isEmpty )
+        throw "未輸入問題" ;
+      if( _dateController.text.isEmpty )
+        throw "未輸入日期" ;
+      //   final TextEditingController _problemController = TextEditingController();
+      //   final TextEditingController _dateController = TextEditingController();
+      //   final TextEditingController _descriptionController = TextEditingController();
+      await item.addDoctor( TTMDoctor( 0 , _hospitalController.text , _problemController.text ,  DateTime.parse( _dateController.text ),
+          _descriptionController.text , false ));
+      MM.MessageBox( context , "OK" ).then((_)
+      => Navigator.of(context).pop() );
+
+    }catch( e )
+    {
+      MM.MessageBox( context , e.toString() );
+      return ;
+    }
   }
 }

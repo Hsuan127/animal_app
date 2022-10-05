@@ -1,15 +1,25 @@
+import 'package:animal_app/TTM/TTMItem.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:animal_app/record_page_item/condition.dart';
 import 'package:animal_app/record_page_item/vaccine.dart';
 import 'package:animal_app/record_page_item/go_to_the_doctor.dart';
 
+import '../TTM/TTMUser.dart';
+import '../bottomAPPBar.dart';
+
 class HealthCondition extends StatelessWidget{
 
+  final TTMUser user ;
+  final TTMItem item ;
 
-  const HealthCondition({Key? key}) : super(key: key);
+  const HealthCondition(
+      TTMUser this.user ,
+      TTMItem this.item ,
+      {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context){
+
     return Container(
       child: Center(
         child: Column(
@@ -68,12 +78,17 @@ class HealthCondition extends StatelessWidget{
     );
   }
   void _navigateToVaccineScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => VaccinePage()));
+   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => VaccinePage( user , item )));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomAPPBar( 1 , child: VaccinePage( this.user  , item ))));
   }
   void _navigateToDoctorScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DoctorPage()));
+ //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => DoctorPage( this.user , this.item )));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomAPPBar( 1 , child: DoctorPage( this.user  , item ))));
+
   }
   void _navigateToConditionScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Condition()));
+   // BottomAPPBar
+ //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => Condition( this.item )));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomAPPBar( 1 , child: Condition( this.item ))));
   }
 }

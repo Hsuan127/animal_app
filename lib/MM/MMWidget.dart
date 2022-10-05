@@ -6,7 +6,7 @@ class MMWidget {
   // 建按鈕 
   static Widget newFlatButton( Widget child , VoidCallback callback )
   {
-    return FlatButton(onPressed: callback, child: child) ;
+    return ElevatedButton(onPressed: callback, child: child) ;
   }
   // 建捲軸
   static Widget newScroll( Widget child , [Axis scrollDirection = Axis.vertical ] )
@@ -127,6 +127,46 @@ class MMWidget {
   // 建立一個 null 的 widget
   static Widget newNullWidget() {
     return new SizedBox.shrink();
+  }
+  // itembutton
+  static Widget newIconButton( IconData? iconData , [ VoidCallback? onPressed ,  Color ?color ])
+  {
+    if( color == null )
+      color = Colors.black ;
+    return IconButton( icon: Icon(iconData , color: color,),
+        onPressed: onPressed
+    );
+  }
+  // 建一個自定的 title bar
+  static Widget newTitleBar( [ Widget? left , Widget? center , Widget? right ])
+  {
+    return Stack( children :[
+      if( left != null ) Align( child: left , alignment : Alignment.centerLeft ),
+      if( center != null ) Center( child: center ,),
+      if( right != null )  Align( child: right , alignment : Alignment.centerRight ),
+    ] );
+  }
+
+  // 建立按鈕
+  static Widget newTap( Widget child , [ VoidCallback? clickCallback ,
+     VoidCallback? longCollback , // 長按
+     VoidCallback? doublcCallback , // 按二下
+
+  ])
+  {
+    return GestureDetector(
+      child: child,
+      onTap: clickCallback,
+      onDoubleTap: doublcCallback,
+      onLongPress: longCollback ,
+    );
+  }
+
+  //
+  // 轉轉
+  Widget newLoadingCircular()
+  {
+    return CircularProgressIndicator();
   }
 
 }

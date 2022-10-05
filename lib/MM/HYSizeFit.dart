@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
+import '../MM/HYSizeFit.dart';
 /// ----------------------------------------------------------
 ///
 ///
@@ -68,9 +68,9 @@ extension DoubleFit on double
 
   // pi
   double get piw {
-    return this * HYSizeFit.screenWidth ;
+    return this * 0.01 * HYSizeFit.screenWidth ;
   }
   double get pih {
-    return this * HYSizeFit.screenHeight ;
+    return this * 0.01 * HYSizeFit.screenHeight ;
   }
 }

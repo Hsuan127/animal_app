@@ -1,23 +1,32 @@
+import 'package:animal_app/TTM/TTMVaccine.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../MM/MM.dart';
+import '../TTM/TTMItem.dart';
+import '../TTM/TTMUser.dart';
+
 // void main() {
 //   runApp(AddVaccinePage());
 // }
 
 class AddVaccinePage extends StatelessWidget {
-  const AddVaccinePage({Key? key}) : super(key : key);
+  const AddVaccinePage(this.user , this.item , {Key? key}) : super(key : key);
   static const String _title = '新增紀錄';
+
+  final TTMUser user ;
+  final TTMItem item ;
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
       home: new Scaffold(
-        body: new AddVaccine(),
+        body: new AddVaccine( user , item ),
       ),
     );
   }
@@ -25,10 +34,15 @@ class AddVaccinePage extends StatelessWidget {
 
 
 class AddVaccine extends StatefulWidget {
+
+
+  final TTMUser user ;
+  final TTMItem item ;
+  AddVaccine( this.user , this.item );
   //const AddVaccine({Key? key}) : super(key : key);
   @override
   State<StatefulWidget> createState() {
-    return _AddVaccine();
+    return _AddVaccine( this.user , this.item );
   }
 }
 
@@ -40,6 +54,12 @@ class _AddVaccine extends State<AddVaccine> {
   final FocusNode _vaccineFocusNode = FocusNode();
   final FocusNode _dateFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
+
+  // 資料
+  final TTMUser user ;
+  final TTMItem item ;
+  _AddVaccine( this.user , this.item );
+
   // Map<String, dynamic> _editTodo = {
   //   'type': '',
   //   'expense': '',
@@ -50,7 +70,31 @@ class _AddVaccine extends State<AddVaccine> {
   // _nextFocus(FocusNode focusNode) {
   //   FocusScope.of(context).requestFocus(focusNode);
   // }
-  _submitForm() {
+  Future _submitForm() async  {
+
+    // 名稱
+    try
+    {
+    //   final TextEditingController _vaccineController = TextEditingController();
+      if( _vaccineController.text.isEmpty )
+        throw "未輸入名稱" ;
+      if( _dateController.text.isEmpty )
+        throw "未輸入日期" ;
+      await item.addVaccine( TTMVaccine( 0 , _vaccineController.text ,  DateTime.parse( _dateController.text ),
+          _descriptionController.text , false ));
+      MM.MessageBox( context , "OK" ).then((_)
+          => Navigator.of(context).pop() );
+    }catch( e )
+    {
+      MM.MessageBox( context , e.toString() );
+      return ;
+    }
+    return ;
+    // 日期
+    //   final TextEditingController _dateController = TextEditingController();
+    // 備註
+    //   final TextEditingController _descriptionController = TextEditingController();
+
     if (_formKey.currentState!.validate()) {
         // final vaccine_record = {
         //   'name': _vaccineController.text,

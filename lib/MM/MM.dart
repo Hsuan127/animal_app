@@ -101,7 +101,7 @@ class MM
   // ------------------------------------------------
   // 彈出
   static Future<void> ShowDialog(var context, Widget? inChild,
-      [Widget? inTitle = null, VoidCallback? onPressed = null , bool isNo = false ]) async {
+      [Widget? inTitle = null, VoidCallback? onPressed = null , bool isNo = false , bool isYes = true ]) async {
     //slideDialog.show
     return showDialog<void>(
       context: context,
@@ -113,16 +113,17 @@ class MM
             child: inChild,
           ),
           actions: <Widget>[
-            FlatButton(
-              child: Text(MM.strOk(context)),
-              onPressed: () {
-                Navigator.of(context).pop();
-                if (null != onPressed) onPressed();
-              },
-            ),
+            if( isYes )
+              ElevatedButton(
+                child: Text(MM.strOk(context)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (null != onPressed) onPressed();
+                },
+              ),
 
             if( isNo )
-              FlatButton(
+              ElevatedButton(
                 child: Text(MM.strCancel(context)),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -154,7 +155,7 @@ class MM
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            ElevatedButton(
               child: Text(inOkStr ?? MM.strOk(context)),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -218,5 +219,183 @@ class MM
     if( len < maxLen )
       return str ;
     return str.substring( 0 ,  ( maxLen - 3 ) ) + " ..." ;
+  }
+  //
+//
+
+  // 新的 top
+  static Widget newTap(Widget inChild,
+      [VoidCallback? inCallback = null, VoidCallback? inLongCallback = null , VoidCallback? inDoubleCallback = null ])
+  {
+    if( null == inCallback )
+      if( inLongCallback == null )
+        if( inDoubleCallback == null )
+          return inChild;
+
+    return GestureDetector(
+      child: inChild,
+      onTap: inCallback,
+      onLongPress: inLongCallback,
+      onDoubleTap: inDoubleCallback ,
+    );
+  }
+
+  //
+  // edit dialog
+  static Future<void> ShowEditDialog(
+      var context,
+      String text,
+      Widget? inTitle,
+      Function(String inText)? onPressed, [
+        TextInputType? keyboardType,
+        InputDecoration ?inputDecoration
+      ]) async {
+    final MaterialLocalizations materialLocalizations =
+    MaterialLocalizations.of(context);
+    // final InputDecoration input = new InputDecoration(labelText: 'Full Name', hintText: 'eg. John Smith');
+    final TextEditingController input = new TextEditingController();
+    input.text = text;
+    //slideDialog.show
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+          title: inTitle,
+          content: SingleChildScrollView(
+            child: new TextField(
+              keyboardType: keyboardType,
+              autofocus: true,
+              controller: input,
+              decoration: inputDecoration,
+
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text(MM.strOk(context)),
+              onPressed: () {
+                // test
+                final String text = input.text.trim() ;
+                // null ，就不處理了
+                if( text.isEmpty )
+                {
+                  MM.MessageBox( context , "未輸入任何文字", "輸入錯誤" );
+                  return ;
+                }
+                //
+                if (null != onPressed)
+                {
+                  final ret = onPressed( text );
+                  if( ret is bool )
+                    if( ret == false )
+                      return ;
+                }
+                Navigator.of(context).pop( text );
+              },
+            ),
+            ElevatedButton(
+              child: Text(MM.strCancel(context)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+  ///
+  static Widget newColumn(List<Widget> inList,
+      [MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+        CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center]) {
+    return Column(
+      children: inList,
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
+    );
+  }
+
+
+  ///
+  static Widget newRow(List<Widget> inList,
+      [MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+        CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center]) {
+    return Row(
+      children: inList,
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
+    );
+  }
+
+  // 建立滑動
+  //   直式
+  static Widget newScrollVertical(Widget inChild,
+      [ScrollController? controller]) {
+    return newScroll(inChild, true, controller);
+  }
+
+  static Widget newColumnScroll(List<Widget> inChild) {
+    return newScrollVertical(newColumn(inChild));
+    //return newScroll( inChild , true );
+  }
+
+  ///   橫式
+  static Widget newScrollHorizontall(Widget inChild) {
+    return newScroll(inChild, false);
+  }
+
+  static Widget newScroll(Widget inChild, [bool isVertical = true ,
+      ScrollController? controller , bool physics = false ]) {
+    Axis axis = (isVertical) ? Axis.vertical : Axis.horizontal;
+    return SingleChildScrollView(
+        scrollDirection: axis,
+        controller: controller,
+        physics: physics ? ClampingScrollPhysics() : null ,
+        //  physics: AlwaysScrollableScrollPhysics()  ,
+        //   reverse :true ,
+        child: inChild);
+  }
+
+  //
+  //
+  static Widget newOutlinedButton( String text , VoidCallback? onPressed , [ double width = 100 , double height = 100 , Color? backgroundColor , double borderRadius = 15 , Color? primary , Widget ?icon ] )
+  {
+    //
+    if( icon == null )
+      icon = SizedBox.shrink();
+
+
+    //
+    return OutlinedButton.icon(
+      onPressed: onPressed ,
+      icon: icon ,// const Icon(Icons.vaccines),
+      label: Text( text ),
+      style: OutlinedButton.styleFrom(
+        backgroundColor : backgroundColor ,
+        fixedSize: Size(width, height),
+        primary: primary ,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+      ),
+    );
+  }
+
+
+  static Widget newElevatedButton( String text , VoidCallback? onPressed ,
+      [  double textSize = 20 , Color ? backgroundColor , VoidCallback? onLongPress , ] )
+  {
+    //
+    return  ElevatedButton(
+      onPressed: onPressed ,
+      child: Text(text, style: TextStyle(fontSize: textSize),),
+      style: ElevatedButton.styleFrom(  primary : backgroundColor ,),
+    );
   }
 }

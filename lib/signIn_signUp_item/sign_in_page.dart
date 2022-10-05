@@ -1,7 +1,9 @@
 import 'package:animal_app/main.dart';
 import 'package:animal_app/signIn_signUp_item/sign_up_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../bottomAPPBar.dart';
 import 'color_utils.dart';
 import 'flutterfire.dart';
 
@@ -24,6 +26,17 @@ class _SignInPageState extends State<SignInPage> {
     _emailTextController.dispose();
     _passwordTextController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState()
+  {/*
+    if( FirebaseAuth.instance.currentUser != null )
+      {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) =>  BottomAPPBar(0))) ;
+
+      }*/
   }
 
   @override

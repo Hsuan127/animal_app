@@ -1,3 +1,5 @@
+import 'package:animal_app/TTM/TTMItem.dart';
+import 'package:animal_app/TTM/TTMSpendRecords.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -6,34 +8,52 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
+import '../MM/MM.dart';
+import '../TTM/TTMUser.dart';
+/*
 void main() {
   runApp(ExpensePage());
 }
-
+*/
 class ExpensePage extends StatelessWidget {
-  const ExpensePage({Key? key}) : super(key : key);
+  const ExpensePage( TTMUser user , TTMItem item , {Key? key}) :
+
+        _user = user ,
+        _item = item
+  ;
+  final TTMUser _user ;
+  final TTMItem _item ;
   static const String _title = '新增花費';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: _title,
-        home: const AddExpense(),
+        home: AddExpense( _user , _item ),
       );
   }
 }
 
 
 class AddExpense extends StatefulWidget {
-  const AddExpense({Key? key}) : super(key : key);
+  AddExpense(TTMUser user , TTMItem item , {Key? key})
+      :
+      _user = user ,
+      _item = item
+  ;
+
+  final TTMUser _user ;
+  final TTMItem _item ;
   @override
   State<StatefulWidget> createState() {
-    return _AddExpense();
+    return _AddExpense( _user , _item );
   }
 }
 
 class _AddExpense extends State<AddExpense> {
+  // 花費日期'
   final TextEditingController _dateController = TextEditingController();
+  // 花費金額
   final TextEditingController _expenseController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -41,6 +61,15 @@ class _AddExpense extends State<AddExpense> {
   final FocusNode _dateFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
   void _onChanged(dynamic val) => debugPrint(val.toString());
+
+  //
+  _AddExpense( TTMUser user , TTMItem item ):
+        _user = user ,
+        _item = item
+  ;
+
+  final TTMUser _user ;
+  final TTMItem _item ;
   // Map<String, dynamic> _editTodo = {
   //   'type': '',
   //   'expense': '',
@@ -52,7 +81,7 @@ class _AddExpense extends State<AddExpense> {
     FocusScope.of(context).requestFocus(focusNode);
   }
   _submitForm() {
-    Scaffold.of(context).showSnackBar(SnackBar(content:
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
     Text('紀錄已儲存！')));
   }
 
@@ -110,8 +139,13 @@ class _AddExpense extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle : true ,
+        title:  const Text('增加花費') ,
+
+      ),
       body: SingleChildScrollView(
-            padding: const EdgeInsets.all(60.0),
+            padding: const EdgeInsets.all(20.0),
             child: Hero(
               tag: 'uniqueTag',
               // flightShuttleBuilder: (BuildContext flightContext,
@@ -211,7 +245,8 @@ class _AddExpense extends State<AddExpense> {
                                       //     return '請選擇花費類別';
                                       //   }
                                       // },
-                                      onChanged: (value)  {
+                                      onChanged: (value)
+                                      {
                                         setState(() {
                                           _categoryHasError = !(_formKey
                                               .currentState?.fields['category']
@@ -357,6 +392,7 @@ class _AddExpense extends State<AddExpense> {
                                           horizontal: 20,
                                           vertical: 15,
                                         ),
+
                                         hintText: '有什麼想備註的嗎？',
                                         hintStyle: const TextStyle(fontSize: 14),
                                         border: OutlineInputBorder(
@@ -365,6 +401,7 @@ class _AddExpense extends State<AddExpense> {
                                       ),
                                       keyboardType: TextInputType.multiline,
                                       maxLines: 5,
+                                      controller: _descriptionController ,
                                       //expands: true,
                                     ),
                                   ),
@@ -376,15 +413,7 @@ class _AddExpense extends State<AddExpense> {
                               //),
                               //SizedBox(height: 20),
                               ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: Text('紀錄已儲存')));
-                                    _formKey.currentState!.save();
-                                    _formKey.currentState!.reset();
-                                  }
-
-                                },
+                                onPressed: _push ,
                                 child: const Text('送出', style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -409,5 +438,56 @@ class _AddExpense extends State<AddExpense> {
     );
 
 
+  }
+
+  //
+  //
+  void _push()
+  {
+    try
+    {
+      if( selectedValue == null ) {
+        throw "not select item" ;
+      }
+      if( _expenseController.text.isEmpty ) {
+        throw "not enter expense" ;
+      }
+      if( _dateController.text.isEmpty ) {
+        throw "not set date " ;
+      }
+
+      final int money = int.parse( _expenseController.text );
+      final String description = _descriptionController.text ;
+      final String dateText = _dateController.text ;
+
+      final callback = ()async
+      {
+        try
+        {
+          await _item.addSpendRecords( TTMSpendRecords(
+              selectedValue! , money , dateText ,
+              DateTime.now() , description )
+          );
+          MM.MessageBox( context , "add down" , "push" ).then((_){ MM.pop(context);});
+
+        }catch( e )
+        {
+          MM.MessageBox( context , e.toString() , "push error" );
+        }
+      };
+      callback();
+    }catch( e )
+    {
+      MM.MessageBox( context , e.toString() , "push error" );
+    }
+    /*
+    if (_formKey.currentState!.validate())
+    {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('紀錄已儲存')));
+      _formKey.currentState!.save();
+      _formKey.currentState!.reset();
+    }
+*/
   }
 }

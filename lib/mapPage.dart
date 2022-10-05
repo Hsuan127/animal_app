@@ -17,7 +17,6 @@ class MapPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('地圖'),
-        centerTitle: true,
       ),
       body: MyMapPage(),
     );

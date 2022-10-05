@@ -240,8 +240,11 @@ class _MGoogleMap extends State<MGoogleMap> {
     );
 
     //
-    Widget b = FlatButton( child: Text( "搜尋"),
-        color: Colors.amber,
+    Widget b = ElevatedButton( child: Text( "搜尋"),
+        style: ElevatedButton.styleFrom(
+          //backgroundColor: Colors.amber,
+        ),
+
         onPressed: ()=> _findPlaces(_dropdownValue) );
     //
     c =  Row( children: [ t,  c , b ] ,

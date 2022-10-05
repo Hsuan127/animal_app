@@ -5,8 +5,8 @@ class LinkPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('連結'),
         centerTitle: true,
+        title: Text('連結'),
       ),
       body: Center(child: Text("連結")),
     );
