@@ -110,8 +110,16 @@ class _ExpenseStateView extends State<ExpenseStateView>
           padding: EdgeInsets.only( top: 10, bottom: 50 ),
           child :  MM.newColumn( [
             _appBarTitle(),
-            _initPie(),
+            Row(
+                mainAxisAlignment : MainAxisAlignment.center ,
+                crossAxisAlignment : CrossAxisAlignment.end ,
+        //        alignment: AlignmentDirectional.bottomEnd,
+                children : [
+              _initPie(),
+                  _initPieText(),
+            //   Text("2"),
 
+            ]),
             _initMonthText(),
             /*
             MMWidget.newRow( [
@@ -280,6 +288,32 @@ class _ExpenseStateView extends State<ExpenseStateView>
   }
 
   //
+  //
+  // text
+  Widget _initPieText()
+  {
+    final double size = 12 ;
+    final List<String> keys = _toKeys() ;
+    final List<Widget> list = [] ;
+    Widget c ;
+    int i ;
+    for( i = 0 ; i < keys.length ; ++i )
+      {
+        c = MM.newRow( [
+          // 文字
+        Container( color: _dataColor[i%_dataColor.length],
+          width: size ,
+          height: size ,
+        ) ,
+          Text( keys[i] , style: TextStyle(fontSize: 12) ),
+
+        ] ) ;
+        list.add( c );
+      }
+
+    return MM.newColumn( list , MainAxisAlignment.start , CrossAxisAlignment.start );
+
+  }
   // 建資料
   List<PieChartSectionData> _initDataSet()
   {
@@ -294,7 +328,7 @@ class _ExpenseStateView extends State<ExpenseStateView>
           return PieChartSectionData(
             color: color ,
             value: value[i].toDouble() ,
-            title: keys[i] ,
+            title: "" ,//keys[i] ,
             radius: 30.piw ,
             titleStyle: const TextStyle(
                 fontSize: 14,

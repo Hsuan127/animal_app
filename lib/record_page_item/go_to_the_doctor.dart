@@ -11,6 +11,7 @@ import '../MM/MM.dart';
 import '../MM/MMWidget.dart';
 import '../TTM/TTMItem.dart';
 import '../TTM/TTMUser.dart';
+import '../bottomAPPBar.dart';
 import 'edit_doctor.dart';
 
 
@@ -89,7 +90,8 @@ class _DoctorPageState extends State<DoctorPage> {
 
 
   void _navigateToAddDoctorScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddDoctor( this.user , this.item , null ))).then((_)
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomAPPBar( 1 , child: AddDoctor( this.user , this.item , null )))).then((_)
+//    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddDoctor( this.user , this.item , null ))).then((_)
         {
           setState(() {
 

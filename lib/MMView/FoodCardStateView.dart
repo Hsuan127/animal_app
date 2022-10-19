@@ -39,19 +39,15 @@ class _FoodCardStateView extends State<FoodCardStateView>
 
   @override
   Widget build(BuildContext context) {
-      Widget ret = MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.amber,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+      Widget ret = Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Center( child:  const Text('飲食狀態') ),
+            title: const  Text('飲食狀態') ,
+            /*
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => Navigator.of(context).pop(),
-            ),
+            ),*/
           ),
           body: Center(
             child:
@@ -69,7 +65,7 @@ class _FoodCardStateView extends State<FoodCardStateView>
 
             ] ),
           ),
-        ),
+
 
       );
 

@@ -28,6 +28,7 @@ class AddDoctorPage extends StatelessWidget {
     return MaterialApp(
       title: _title,
       home: new Scaffold(
+
         body: new AddDoctor( this._user , this.item , this._doctor ),
       )
 
@@ -105,6 +106,11 @@ class _AddDoctor extends State<AddDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle : true ,
+        title:  const Text('增加就醫記錄') ,
+
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(60.0),
         child: FormBuilder(
@@ -129,6 +135,7 @@ class _AddDoctor extends State<AddDoctor> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  if( false )
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
@@ -137,7 +144,7 @@ class _AddDoctor extends State<AddDoctor> {
                             ),
                           ),
                         ),
-
+                  if( false )
                         Divider(
                           color: Colors.grey[400],
                           height: 10,

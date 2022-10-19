@@ -12,6 +12,7 @@ import '../MM/MM.dart';
 import '../MM/MMWidget.dart';
 import '../TTM/TTMItem.dart';
 import '../TTM/TTMUser.dart';
+import '../bottomAPPBar.dart';
 import 'edit_vaccine.dart';
 
 
@@ -243,7 +244,9 @@ class _VaccinePageState extends State<VaccinePage>{
 
 
   void _navigateToAddVaccineScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddVaccine( user , item )))
+    // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomAPPBar( 1 , child: AddExpense( _user , _item )))).then((_)
+    // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddVaccine( user , item )))
+     Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomAPPBar( 1 , child: AddVaccine( user , item ))))
     .then((_){
       setState(() {
 

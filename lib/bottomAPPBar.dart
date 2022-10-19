@@ -96,9 +96,9 @@ class _BottomAPPBarState extends State<BottomAPPBar> {
       // floatingActionButton: Container(
       //   height: MediaQuery.of(context).size.width * 0.18,
       //   width: MediaQuery.of(context).size.width * 0.18,
-        floatingActionButton: Container(
-          height: MediaQuery.of(context).size.width * 0.18,
-          width: MediaQuery.of(context).size.width * 0.18,
+      floatingActionButton: Container(
+        height: MediaQuery.of(context).size.width * 0.18,
+        width: MediaQuery.of(context).size.width * 0.18,
         child: FittedBox(
           child:FloatingActionButton(
             onPressed: () {
@@ -111,10 +111,10 @@ class _BottomAPPBarState extends State<BottomAPPBar> {
             ),
             foregroundColor: floating_action_button_color,
             backgroundColor: Colors.amber,
-          elevation: 0,
+            elevation: 0,
           ),
-         ),
         ),
+      ),
 
       //懸浮按鈕和底部工具欄進行融合
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -156,7 +156,7 @@ class _BottomAPPBarState extends State<BottomAPPBar> {
       //     ],
       //   ),
       bottomNavigationBar: SizedBox(
-      height: MediaQuery.of(context).size.height * 0.085,
+        height: MediaQuery.of(context).size.height * 0.085,
         child:BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.amber[700],
@@ -167,7 +167,7 @@ class _BottomAPPBarState extends State<BottomAPPBar> {
           selectedIconTheme: IconThemeData (
               color: Colors.white,
               opacity: 1.0,
-              size: 30
+              size: 25
           ),
           unselectedIconTheme: IconThemeData (
               color: Colors.black,

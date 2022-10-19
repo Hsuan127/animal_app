@@ -6,6 +6,7 @@ class TTMSpendRecords {
   final DateTime created;
   final String note;
   final DateTime targetDate ;
+  final int dailyIndex ;
 
 
   static const String DIR = "Spend" ;
@@ -15,7 +16,8 @@ class TTMSpendRecords {
       int this.spend,
       String this.date, // should be Datetime
       DateTime this.created,
-      String this.note ):
+      String this.note ,
+      int this.dailyIndex ):
         targetDate = DateTime.parse(date)
   ;
 
@@ -24,7 +26,8 @@ class TTMSpendRecords {
     'Spend': spend,
     'Date': date,
     'Created Date': created,
-    'Notes': note
+    'Notes': note,
+    'dailyIndex' : dailyIndex
   };
 
   TTMSpendRecords.fromSnapshot(snapshot)
@@ -33,7 +36,9 @@ class TTMSpendRecords {
         date = snapshot['Date'],
         created = snapshot['Created Date'].toDate(),
         note = snapshot['Notes'] ,
-        targetDate = DateTime.parse(snapshot['Date'])
+        targetDate = DateTime.parse(snapshot['Date']),
+        dailyIndex = ( snapshot['dailyIndex'] != null ) ? snapshot['dailyIndex'] : 0
+
   ;
 
   bool checkYYMM(DateTime dateTime)

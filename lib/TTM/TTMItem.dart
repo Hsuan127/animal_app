@@ -31,6 +31,7 @@ class TTMItem
   final String _id ;
   final String _name ;
   int _money ;
+  int nextMoney = 0 ;
   final DocumentReference? _documentReference ;
   TTMItem( DocumentReference? documentReference , String id ,String name , int money )
   : _documentReference = documentReference
@@ -45,10 +46,32 @@ class TTMItem
 
     DateTime dateTime = DateTime.now();
     int ret = 0 ;
+    int i ,  nn ;
+    // 本月花費
     List<TTMSpendRecords> spends = await getSpendRecords() ;
     for( final TTMSpendRecords spendRecords in spends )
       if( spendRecords.checkYYMM(dateTime))
         ret += spendRecords.spend ;
+      // 下月花費
+    nextMoney = 0 ;
+    nn = 0 ;
+    for( i = 0 ; i < 6 ; ++i )
+    {
+      DateTime exitDate = new DateTime( dateTime.year , dateTime.month - i );
+      String monthName = "" ;
+
+      for( final TTMSpendRecords spendRecords in spends ) {
+        try {
+          if (spendRecords.checkYYMM(exitDate))
+            if (spendRecords.dailyIndex == 0) {
+              nextMoney += spendRecords.spend;
+              nn ++;
+            }
+        }catch(_){}
+      }
+      }
+    if( nn > 0 )
+      nextMoney = nextMoney ~/ nn ;
 
     /*
     CollectionReference collectionReference = _documentReference!.collection( TTMSpendRecords.DIR  );

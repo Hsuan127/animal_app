@@ -79,6 +79,8 @@ class _RecordPageState extends State<RecordPage>{
   //
   //
 
+  // 下月花費
+  int _nextMonthMoney = 0 ;
   // 名稱列表
   bool _isLoading = false  ;
   Widget _petListPage()
@@ -160,7 +162,7 @@ class _RecordPageState extends State<RecordPage>{
         SizedBox(
           height: 10,
         ),
-        /*
+
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
@@ -174,8 +176,8 @@ class _RecordPageState extends State<RecordPage>{
         ),
 
         ExpectCard(
-            expectation: "\$ 8,000"
-        ),*/
+            expectation:  "\$ ${item.nextMoney}"
+        ),
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
@@ -294,6 +296,7 @@ class _RecordPageState extends State<RecordPage>{
       TTMItem item = _user.getAt( index );
       _spend = await item.getSpend();
       _selectedIndex = index;
+
       setState(()
       {
       });

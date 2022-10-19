@@ -57,21 +57,17 @@ class _WeightCardStateView extends State<WeightCardStateView>
 
   @override
   Widget build(BuildContext context) {
-    Widget ret = MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    Widget ret = Scaffold(
         resizeToAvoidBottomInset: false ,
 
         appBar: AppBar(
           centerTitle: true,
-          title: const Center( child:  const Text('體重狀態') ),
+          title: const Text('體重狀態') ,
+          /*
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
-          ),
+          ),*/
         ),
         body: Center(
           child:
@@ -90,7 +86,7 @@ class _WeightCardStateView extends State<WeightCardStateView>
 
           ] ),
         ),
-      ),
+
 
     );
 

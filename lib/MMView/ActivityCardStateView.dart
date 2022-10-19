@@ -47,19 +47,15 @@ class _ActivityCardStateView extends State<ActivityCardStateView>
   //
   @override
   Widget build(BuildContext context) {
-    Widget ret = MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    Widget ret = Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Center( child:  const Text('活動量') ),
+          title:  Text('活動量') ,
+          /*
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop( true ),
-          ),
+          ),*/
         ),
         body: Center(
           child: MM.newColumn([
@@ -82,7 +78,7 @@ class _ActivityCardStateView extends State<ActivityCardStateView>
      //       MM.newElevatedButton("上一頁", () { MM.pop(context);  }),
           ]),
         ),
-      ),
+
     );
 
     return ret;

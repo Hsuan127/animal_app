@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http; //http
 import 'dart:convert';
+import 'package:animal_app/match_page_item/matchFavDB.dart';
+import 'package:animal_app/match_page_item/animal.dart';
 
 class MatchFavPage extends StatefulWidget {
   const MatchFavPage({Key? key}) : super(key: key);
@@ -10,6 +12,20 @@ class MatchFavPage extends StatefulWidget {
 }
 
 class _MatchFavPageState extends State<MatchFavPage> {
+  MatchFavDB db = MatchFavDB(); //matchFavDB
+
+  //取消關注
+  void btnClickEvent(int animalId) {
+    //刪除資料庫裡特定的動物id
+    db.deleteAnimalId(animalId);
+  }
+
+  //串接動物API
+  getAnimalData(String host) async {
+    var response = await http.get(Uri.parse(host));
+    return response; // http 0.13 後不能直接輸入 string
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,163 +34,92 @@ class _MatchFavPageState extends State<MatchFavPage> {
         centerTitle: true,
       ),
 
-      body: DataFromAPI(),
-
-    );
-  }
-}
-
-//動物的資訊
-class Animal {
-  // final String id, album, variety;
-  final String album, variety, age, sex;
-
-  // Animal(this.id, this.album, this.variety);
-  Animal(this.album, this.variety, this.age, this.sex);
-
-  animal_image(String album) {
-    if (album != '') {
-      return Image.network(album);
-    } else {
-      return null;
-    }
-  }
-}
-
-//串接動物API
-class DataFromAPI extends StatefulWidget {
-  const DataFromAPI({Key? key}) : super(key: key);
-
-  @override
-  State<DataFromAPI> createState() => _DataFromAPIState();
-}
-
-class _DataFromAPIState extends State<DataFromAPI> {
-  // 原例: 延遲 2 秒後傳入 String 'Data Loaded'
-  final Future<String> _calculation = Future<String>.delayed(
-    const Duration(seconds: 2),
-        () => 'Data Loaded',
-  );
-
-  // 輸入資料網址 令 http 抓取資料
-  final String host =
-      'https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&\$top=1&album_file=http';
-
-  getAnimalData() {
-    return http.get(Uri.parse(host)); // http 0.13 後不能直接輸入 string
-  }
-
-  List<Animal> animals = [];
-
-  @override
-  Widget build(BuildContext context) {
-    // 改為 Scaffold 輸出
-    return Scaffold(
       body: Container(
-        // child: Card(
+        color: Colors.white,
         child: FutureBuilder(
-          future: getAnimalData(), // 執行 http
-          builder: (context, AsyncSnapshot snapshot) {
-            // snapshot 抓資料，若有資料則:
-            if (snapshot.hasData) {
-              // jsonDecode 解壓
-              List datas = jsonDecode(snapshot.data.body);
-              print(datas);
+            future: db.getAnimalId(),
+            builder: (context, AsyncSnapshot snapshot) {
+              return ListView.builder(
+                  itemCount: db.animalList.length,
+                  itemBuilder: (context, index) {
+                    //串接API抓動物資料
+                    return FutureBuilder(
+                        future: getAnimalData(
+                            "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&animal_id=${db.animalList[index].toString()}"),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          //用snapshot抓資料，若有資料則:
+                          if (snapshot.hasData) {
+                            //用jsonDecode解壓之後拿到所有資料並加進List datas裡
+                            List datas = jsonDecode(snapshot.data.body);
 
-              Animal animal;
+                            //創建動物
+                            var data = datas[0];
+                            Animal animal = Animal(
+                                data['animal_id'],
+                                data['album_file'],
+                                data['animal_Variety'],
+                                data['animal_age'],
+                                data['animal_sex'],
+                                data['animal_colour'],
+                                data['animal_bodytype'],
+                                data['shelter_name'],
+                                data['animal_kind']);
 
-              for (int idx = 0; idx < datas.length; idx++) {
-                var data = datas[idx];
+                            //動物的Card
+                            return Card(
+                                color: Colors.amberAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                clipBehavior: Clip.antiAlias, //抗鋸齒
+                                elevation: 20, //陰影大小
+                                child: Container(
+                                  height: 100,
+                                  alignment: Alignment.center,
+                                  child: ListTile(
+                                      //該動物的圖片
+                                      // leading: animal.animalImage(animal.album),
+                                      leading: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: animal.animalImage(animal.album),
+                                      ),
 
-                animal = new Animal(data['album_file'], data['animal_Variety'],
-                    data['animal_age'], data['animal_sex']);
-                animals.add(animal);
-              }
+                                      //該動物的收容所
+                                      title: Text(
+                                        animal.shelterName,
+                                      ),
 
-              return Stack(
-                children: [
-                  Container(
-                    width: 432,
-                    height: 864,
-                  ),
-                  PositionedDirectional(
-                    top: 159,
-                    start: 68,
-                    child: Stack(children: [
-                      Container(
-                        width: 432,
-                        height: 864,
-                      ),
-                      // Rectangle 2
-                      PositionedDirectional(
-                        top: 0,
-                        start: 0,
-                        child: Container(
-                          width: 295.651,
-                          height: 382.672,
-                          child: animals[0].animal_image(animals[0].album),
-                        ),
-                      ),
-                      // Rectangle 3
-                      PositionedDirectional(
-                        top: 341.441,
-                        start: 30.123,
-                        child: Container(
-                            width: 235.405,
-                            height: 82.559,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(11)),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: const Color(0x40000000),
-                                      offset: Offset(0, 4),
-                                      blurRadius: 4,
-                                      spreadRadius: 0)
-                                ],
-                                color: Color(0xffffffff))),
-                      ),
-                      // 小明
-                      PositionedDirectional(
-                        top: 354.829,
-                        start: 54.667,
-                        child: Text(animals[0].variety,
-                            style: const TextStyle(
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Inter",
-                                fontStyle: FontStyle.normal,
-                                fontSize: 20.1),
-                            textAlign: TextAlign.left),
-                      ),
-                      // 3歲 男
-                      PositionedDirectional(
-                        top: 388.299,
-                        start: 54.667,
-                        child: Text(animals[0].age + ' ' + animals[0].sex,
-                            style: const TextStyle(
-                                color: const Color(0xff000000),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Inter",
-                                fontStyle: FontStyle.normal,
-                                fontSize: 15.9),
-                            textAlign: TextAlign.left),
-                      )
-                    ]),
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              print('Error: ${snapshot.error}');
-              return Container(); // 失敗回傳空資料
-            } else {
-              print('Awaiting result...');
-              return Container();
-            }
-          },
-        ),
+                                      //該動物的id
+                                      subtitle: Text(
+                                        'ID : ${animal.id}',
+                                      ),
+
+                                      //關注or取消關注
+                                      trailing: IconButton(
+                                        color: Colors.red,
+                                          onPressed: () {
+                                            setState(() {
+                                              btnClickEvent(animal.id);
+                                            });
+                                          },
+                                          icon: Icon(Icons.favorite))),
+                                ));
+                          } else if (snapshot.hasError) {
+                            print('Error: ${snapshot.error}');
+                            return Container(
+                                child: Center(
+                                    child: Text(
+                                        'Error: ${snapshot.error}'))); // 失敗回傳空資料
+                          } else {
+                            print('Awaiting result...');
+                            return Container(
+                                child: Center(child: Text('資料加載中請稍候...')));
+                          }
+                        });
+                  });
+            }),
       ),
-      // ),
     );
   }
 }

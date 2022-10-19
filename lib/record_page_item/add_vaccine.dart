@@ -166,6 +166,11 @@ class _AddVaccine extends State<AddVaccine> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle : true ,
+        title:  const Text('增加疫苗施打') ,
+
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(60.0),
         child: FormBuilder(
@@ -192,6 +197,7 @@ class _AddVaccine extends State<AddVaccine> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    if( false )
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
@@ -200,7 +206,7 @@ class _AddVaccine extends State<AddVaccine> {
                         ),
                       ),
                     ),
-
+                    if( false )
                     Divider(
                       color: Colors.grey[400],
                       height: 10,
