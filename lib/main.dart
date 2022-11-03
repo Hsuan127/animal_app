@@ -9,21 +9,12 @@ import 'package:animal_app/recordPage.dart';
 import 'homePage.dart';
 import 'mapPage.dart';
 import 'linkPage.dart';
-import 'package:animal_app/record_page_item/add_expense.dart';
-import 'package:animal_app/record_page_item/add_vaccine.dart';
-import 'package:animal_app/record_page_item/add_doctor.dart';
-import 'package:animal_app/record_page_item/condition.dart';
-import 'package:animal_app/record_page_item/weight_record.dart';
-import 'package:animal_app/record_page_item/shit_record.dart';
-import 'package:animal_app/record_page_item/activity_record.dart';
-import 'package:animal_app/record_page_item/diet_record.dart';
-
+import 'notification_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
-
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().initializePlatformNotifications();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initializeDateFormatting(); // TODO 20220912: 多國語言，不然圖表跑不出來
   runApp(const MyApp());
@@ -35,10 +26,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'iPet',
 
       theme: ThemeData(
         primarySwatch: Colors.amber,
+          fontFamily: 'GenSen',
           appBarTheme: const AppBarTheme(
               //backgroundColor: Colors.white,
               // This will be applied to the "back" icon
@@ -46,8 +38,8 @@ class MyApp extends StatelessWidget {
               // This will be applied to the action icon buttons that locates on the right side
               actionsIconTheme: IconThemeData(color: Colors.white),
               centerTitle: true,
-              elevation: 15,
-              titleTextStyle: TextStyle(color: Colors.white, fontSize: 26)),
+              elevation: 0,
+              titleTextStyle: TextStyle(color: Colors.white, fontSize: 26, fontFamily: 'Gensen')),
       ),
 
       // home: const MyHomePage(),
@@ -64,8 +56,8 @@ class MyApp extends StatelessWidget {
         //When navigating to the "/matchPage" route, build the MatchPage widget.
         '/homePage': (context) => BottomAPPBar(2),
         '/matchPage': (context) => BottomAPPBar(0),
-        '/matchFavPage': (context) => BottomAPPBar(6),
-        '/matchFilterPage': (context) => BottomAPPBar(5),
+        '/matchPage/matchFavPage': (context) => BottomAPPBar(6),
+        '/matchPage/matchFilterPage': (context) => BottomAPPBar(5),
         '/recordPage': (context) => RecordPage(),
    //     '/addExpense': (context) => BottomAPPBar(7),
         '/mapPage': (context) => MapPage(),

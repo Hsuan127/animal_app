@@ -26,7 +26,7 @@ class _MGoogleMap extends State<MGoogleMap> {
 
 
   // TODO: API
-  final String API_KEY = "AIzaSyAHBuP6mJoew1cAjtd46zrbfEAHc2OwT48" ;
+  final String API_KEY = "AIzaSyBWwdIt51A8x2sf6NBev4ORvq-irI09kpE" ;
 
   // TODO: Google 控制項
   Completer<GoogleMapController> _controller = Completer();
@@ -61,7 +61,7 @@ class _MGoogleMap extends State<MGoogleMap> {
 
     // 還沒進來
     if( _latLng == null )
-      return Text( "loading ");
+      return Center(child: Text("努力加載地圖中..."));
 
     return Stack( children: [
       _initGoogleMap(),
@@ -76,6 +76,7 @@ class _MGoogleMap extends State<MGoogleMap> {
   {
     Widget gotoWidget = MMWidget.newRow([
       //Text( "v:20220629-1 " , textAlign:TextAlign.left ),
+      SizedBox(width:20),
       MMWidget.newFlatButton( Text( "現在位置") , (){ _gotoUserLocation();}) ,
     ]);
     Widget c ;
@@ -202,7 +203,7 @@ class _MGoogleMap extends State<MGoogleMap> {
   //
   //
   //
-  //   動物醫院
+  // 動物醫院
   // 動物美容院
   // 寵物用品店
   // 寵物旅館
@@ -214,10 +215,10 @@ class _MGoogleMap extends State<MGoogleMap> {
   // TODO: 20220807 建版
   Widget _initTypeCombo() // 建模式列表
   {
-    Widget t = Text( "Find:") ;
+    Widget t = Text( "我想尋找:") ;
     Widget c = DropdownButton<String>(
       value: _dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
+      icon: const Icon(Icons.arrow_drop_down_rounded ),
       elevation: 16,
       style: const TextStyle(color: Colors.black),
       underline: Container(
@@ -288,7 +289,7 @@ class _MGoogleMap extends State<MGoogleMap> {
     Widget c = DropdownButton<MMPlaceItem>(
       isExpanded:true ,
       value: _mmPlaceItem ,// TODO: 20220807
-      icon: const Icon(Icons.arrow_downward),
+      icon: const Icon(Icons.arrow_drop_down_rounded),
       elevation: 16,
       style: const TextStyle(color: Colors.black),
       underline: Container(

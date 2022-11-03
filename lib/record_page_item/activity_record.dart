@@ -57,9 +57,9 @@ class _ActivityRecordState extends State<ActivityRecord> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomRadioButton("高", 1),
+                CustomRadioButton("低", 1),
                 CustomRadioButton("中", 2),
-                CustomRadioButton("低", 3)
+                CustomRadioButton("高", 3)
 
               ],
 

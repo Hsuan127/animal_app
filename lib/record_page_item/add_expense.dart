@@ -124,12 +124,12 @@ class _AddExpense extends State<AddExpense> {
   //const AddExpense({Key? key}) : super(key: key);
 
   final List<String> expenseItems = [
-    '食物',//'飼料或主食罐',
-    '保健品',//'其他食品或保健品',
+    '飼料或主食罐',//'飼料或主食罐',
+    '其他食品或保健品',//'其他食品或保健品',
     '日用品',
-    '醫藥',//'醫療或健康檢查',
+    '醫療或健康檢查',//'醫療或健康檢查',
     '美容',
-    '住宿',//或寄養',
+    '住宿或寄養',//或寄養',
   ];
   String? selectedValue = null;
   bool _categoryHasError = false;
@@ -182,7 +182,7 @@ class _AddExpense extends State<AddExpense> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        child: Text('增加',
+                        child: Text('花費內容',
                             style: TextStyle(fontSize: 24,)
                         ),
                       ),
@@ -482,13 +482,13 @@ class _AddExpense extends State<AddExpense> {
     try
     {
       if( selectedValue == null ) {
-        throw "not select item" ;
+        throw "未選擇花費類別" ;
       }
       if( _expenseController.text.isEmpty ) {
-        throw "not enter expense" ;
+        throw "未輸入花費金額" ;
       }
       if( _dateController.text.isEmpty ) {
-        throw "not set date " ;
+        throw "未選擇花費日期 " ;
       }
 
       final int money = int.parse( _expenseController.text );
@@ -503,7 +503,7 @@ class _AddExpense extends State<AddExpense> {
               selectedValue! , money , dateText ,
               DateTime.now() , description , _dailyIndex )
           );
-          MM.MessageBox( context , "新增成功" , "提示" ).then((_){ MM.pop(context);});
+          MM.MessageBox( context , "新增成功" ).then((_){ MM.pop(context);});
 
         }catch( e )
         {
@@ -513,7 +513,7 @@ class _AddExpense extends State<AddExpense> {
       callback();
     }catch( e )
     {
-      MM.MessageBox( context , e.toString() , "push error" );
+      MM.MessageBox( context , e.toString() , "無法新增" );
     }
     /*
     if (_formKey.currentState!.validate())

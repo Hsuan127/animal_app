@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../MM/HYSizeFit.dart';
 import '../MM/MM.dart';
 import '../TTM/TTMItem.dart';
 import '../TTM/TTMUser.dart';
@@ -112,7 +113,7 @@ class _AddDoctor extends State<AddDoctor> {
 
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(60.0),
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.piw),
         child: FormBuilder(
           key: _formKey,
         //child: Padding(
@@ -150,6 +151,19 @@ class _AddDoctor extends State<AddDoctor> {
                           height: 10,
                           thickness: 2,
                         ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Text('就醫細項',
+                          style: TextStyle(fontSize: 24,)
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey[400],
+                    height: 10,
+                    thickness: 2,
+                  ),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -354,6 +368,7 @@ class _AddDoctor extends State<AddDoctor> {
                           onPressed: () {
                           //  _formKey.
                             _onSave();
+
                             /*
                             if (_formKey.currentState!.validate()){
                               _formKey.currentState!.save();
@@ -400,7 +415,7 @@ class _AddDoctor extends State<AddDoctor> {
       //   final TextEditingController _descriptionController = TextEditingController();
       await item.addDoctor( TTMDoctor( 0 , _hospitalController.text , _problemController.text ,  DateTime.parse( _dateController.text ),
           _descriptionController.text , false ));
-      MM.MessageBox( context , "OK" ).then((_)
+      MM.MessageBox( context , "新增完成" ).then((_)
       => Navigator.of(context).pop() );
 
     }catch( e )

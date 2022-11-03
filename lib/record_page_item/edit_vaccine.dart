@@ -276,7 +276,7 @@ class _EditVaccine extends State<EditVaccine> {
       //   final TextEditingController _descriptionController = TextEditingController();
       await TTMVaccine( 0 , _vaccineController.text ,  DateTime.parse( _dateController.text ),
           _descriptionController.text , false , _vaccine.snapshot ).upDate();
-      MM.MessageBox( context , "OK" ).then((_)
+      MM.MessageBox( context , "更新成功" ).then((_)
       => Navigator.of(context).pop() );
 
     }catch( e )
@@ -291,7 +291,7 @@ class _EditVaccine extends State<EditVaccine> {
     try
     {
       await _vaccine.del();
-      MM.MessageBox( context , "OK" ).then((_)
+      MM.MessageBox( context , "刪除成功" ).then((_)
       => Navigator.of(context).pop() );
 
     }catch(_){};

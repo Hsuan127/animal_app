@@ -102,6 +102,7 @@ class _DoctorPageState extends State<DoctorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text('就醫紀錄'),centerTitle: true ,),
       body: Padding(
         padding: EdgeInsets.all(10.piw),

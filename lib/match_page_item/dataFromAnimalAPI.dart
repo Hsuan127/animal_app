@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // http串接API
+import 'package:http/http.dart' as http; //http串接API
 import 'package:drag_like/drag_like.dart'; //Drag左右滑功能
 import 'dart:convert';
 import 'dart:ui';
@@ -9,9 +9,8 @@ import 'package:animal_app/match_page_item/matchFavDB.dart';
 
 //串接動物API
 class DataFromAnimalAPI extends StatefulWidget {
-  String host;
-
-  DataFromAnimalAPI(this.host, {Key? key}) : super(key: key);
+  List<String> hostCompList; //用來存放所有需要介接API的網址
+  DataFromAnimalAPI(this.hostCompList, {Key? key}) : super(key: key);
 
   @override
   State<DataFromAnimalAPI> createState() => _DataFromAnimalAPIState();
@@ -29,8 +28,16 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
 
   //串接動物API
   getAnimalData() async {
-    var response = await http.get(Uri.parse(widget.host));
-    return response; // http 0.13 後不能直接輸入 string
+    List datas = [];
+    for (int h = 0; h < widget.hostCompList.length; h++){
+      var response = await http.get(Uri.parse(widget.hostCompList[h]));
+      if (response.body.isNotEmpty) {
+        datas.add(jsonDecode(response.body)); //用jsonDecode解壓之後拿到所有資料並加進List datas裡
+      }
+    }
+    datas.toSet(); //去掉datas裡重複的資料
+    // print(datas);
+    return datas;
   }
 
   @override
@@ -42,25 +49,34 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
           builder: (context, AsyncSnapshot snapshot) {
             //用snapshot抓資料，若有資料則:
             if (snapshot.hasData) {
-              //用jsonDecode解壓之後拿到所有資料並加進List datas裡
-              List datas = jsonDecode(snapshot.data.body);
-
+              List datas = snapshot.data;
               // print(datas);
 
               //把每一筆資料加進List<Animal> animals裡面
               Animal animal;
-              for (int idx = 0; idx < datas.length; idx++) {
-                var data = datas[idx];
+              for (int idx = 0; idx < datas[0].length; idx++) {
+                var data = datas[0][idx];
+                // print(data);
                 animal = Animal(
-                    data['animal_id'],
-                    data['album_file'],
-                    data['animal_Variety'],
-                    data['animal_age'],
-                    data['animal_sex'],
-                    data['animal_colour'],
-                    data['animal_bodytype'],
-                    data['shelter_name'],
-                    data['animal_kind']);
+                  data['animal_id'],
+                  data['animal_subid'],
+                  data['animal_area_pkid'],
+                  data['animal_kind'],
+                  data['animal_Variety'],
+                  data['animal_sex'],
+                  data['animal_bodytype'],
+                  data['animal_colour'],
+                  data['animal_age'],
+                  data['animal_sterilization'],
+                  data['animal_bacterin'],
+                  data['animal_foundplace'],
+                  data['animal_remark'],
+                  data['shelter_name'],
+                  data['album_file'],
+                  data['cDate'],
+                  data['shelter_address'],
+                  data['shelter_tel'],
+                );
                 animals.add(animal);
               }
 
@@ -76,18 +92,29 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                         //產生可以drag的畫面
                         Container(
                           padding: EdgeInsets.only(
-                              left: 0, right: 0, top: 0, bottom: 0),
+                              left: MediaQueryData.fromWindow(window).padding.left,
+                              right: MediaQueryData.fromWindow(window).padding.right,
+                              top: 0,
+                              bottom: 0
+                          ),
                           child: DragLike(
                             dragController: _dragController,
                             duration: Duration(milliseconds: 520),
                             allowDrag: true,
                             child: animals_drag.length <= 0
-                                ? Text('加载中...')
+                                ? Container(child: Center(child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('暫無符合此篩選條件的浪浪！'),
+                                    Text('請重新設定篩選條件哦～'),
+                                  ],
+                                )))
                                 : Drag(animal: animals_drag[0]),
                             secondChild: animals_drag.length <= 1
                                 ? Container()
                                 : Drag(animal: animals_drag[1]),
-                            screenWidth: 375,
+                            screenWidth: MediaQueryData.fromWindow(window).size.width, //375
                             outValue: 0.8,
                             dragSpeed: 1000,
                             onChangeDragDistance: (distance) {
@@ -125,7 +152,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontSize: 20,
-                                                  color: Colors.white,
+                                                  color: Colors.amber[100],
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Icon(
@@ -147,25 +174,21 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                             },
                           ),
                         ),
+
                         //左右滑的按鈕
                         Positioned(
-                            left: 0,
-                            bottom: MediaQueryData.fromWindow(window)
-                                    .padding
-                                    .bottom +
-                                40,
+                            left: MediaQueryData.fromWindow(window).padding.left,
+                            top: (MediaQueryData.fromWindow(window).size.height - 100) / 2.3,
                             child: Container(
-                              width: 432,
+                              width: MediaQueryData.fromWindow(window).size.width,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   //左滑按鈕
                                   ElevatedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.blueAccent),
+                                            MaterialStateProperty.all(Color(0x7F808080)), //Colors.grey[100]
                                         elevation: MaterialStateProperty.all(0),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
@@ -175,7 +198,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                               color: Colors.transparent),
                                         )),
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.all(15)),
+                                            EdgeInsets.all(0)),
                                       ),
                                       child: Icon(Icons.highlight_remove,
                                           color: Colors.white, size: 24.0),
@@ -184,12 +207,14 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                           _dragController.toLeft(
                                               completeTag: 'custom_left');
                                       }),
+
+                                  SizedBox(width: 20),
+
                                   //右滑按鈕
                                   ElevatedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.pinkAccent),
+                                            MaterialStateProperty.all(Color(0x7Fff0000)), //Colors.pinkAccent
                                         elevation: MaterialStateProperty.all(0),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
@@ -199,7 +224,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                               color: Colors.transparent),
                                         )),
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.all(15)),
+                                            EdgeInsets.all(0)),
                                       ),
                                       child: Icon(Icons.favorite,
                                           color: Colors.white, size: 24.0),
@@ -242,7 +267,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                                             TextAlign.center,
                                                         style: TextStyle(
                                                             fontSize: 20,
-                                                            color: Colors.white,
+                                                            color: Colors.amber[100],
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
@@ -258,6 +283,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                 ],
                               ),
                             ))
+
                       ],
                     )),
               );
@@ -268,7 +294,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                       child: Text('Error: ${snapshot.error}'))); // 失敗回傳空資料
             } else {
               print('Awaiting result...');
-              return Container(child: Center(child: Text('資料加載中請稍候...')));
+              return Container(child: Center(child: Text('努力加載浪浪資料中...')));
             }
           },
         ),

@@ -63,7 +63,7 @@ class _ActivityCardStateView extends State<ActivityCardStateView>
                 style: TextStyle(
                   fontSize: 20,
                 )),
-            // 本日排便選擇
+            // 本日活動量選擇
             _initSelect(),
 
             //

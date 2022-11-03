@@ -58,8 +58,8 @@ class _ShitRecordState extends State<ShitRecord> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomRadioButton("正常", 1),
-                  CustomRadioButton("腹瀉", 2),
-                  CustomRadioButton("便秘", 3)
+                  CustomRadioButton("便秘", 2),
+                  CustomRadioButton("腹瀉", 3)
 
                 ],
 

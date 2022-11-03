@@ -15,11 +15,10 @@ class MatchFavDB {
         .collection('favorite animals')
         .get()
         .then((snapshot) => snapshot.docs.forEach((document) {
-              animalListNew.add(document.data()['id']);
-            }));
+      animalListNew.add(document.data()['id']);
+    }));
     animalList.clear();
     animalList.addAll(animalListNew);
-    print(animalList);
   }
 
   //新增特定的動物至資料庫

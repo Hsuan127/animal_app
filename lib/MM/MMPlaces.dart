@@ -10,6 +10,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'MM.dart';
 import 'MMWidget.dart';
 import 'dart:math';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 /// ---------------------------------------------------------------
 ///
@@ -110,7 +111,7 @@ class MMPlaceItem
     ret += toStr("地址", _data.formattedAddress);
     if (_details != null)
       ret += toStr( "電話" , _details!.result.formattedPhoneNumber );
-    ret += toStr("星等", _data.rating);
+    ret += toStr("評分", _data.rating);
     ret += toStr("價格水平", _data.priceLevel);
 
     if (_details != null)

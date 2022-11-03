@@ -11,9 +11,9 @@ import 'TTMDoctor.dart';
 class TTMItem
 {
 
-  static final shitName = ["正常", "腹瀉" ,"便秘" ] ;
-  static final foodName = ["正常", "偏少" ,"偏多" ] ;
-  static final activityName =  [ "高" , "中" , "低" ];
+  static final shitName = ["正常", "便秘", "腹瀉" ] ;
+  static final foodName = ["正常", "偏少", "偏多" ] ;
+  static final activityName =  [ "低" , "中" , "高" ];
 
   static Future<TTMItem> init( QueryDocumentSnapshot queryDocumentSnapshot )async
   {
@@ -188,21 +188,21 @@ class TTMItem
     _todayWeight = value ;
     await pushCondition( "weight" , value );
   }
-  Future<void> pushConditionShit( int value )async
-  {
-    try {
-      _todayShit = shitName[value];
-      await pushCondition("shit", value);
-    }catch(_){};
-  }
+  // Future<void> pushConditionShit( int value )async
+  // {
+  //   try {
+  //     _todayShit = shitName[value];
+  //     await pushCondition("shit", value);
+  //   }catch(_){};
+  // }
 
-  Future<void> pushConditionFood( int value )async
-  {
-    try {
-      _todayFood = foodName[value];
-      await pushCondition("food", value);
-    }catch(_){};
-  }
+  // Future<void> pushConditionFood( int value )async
+  // {
+  //   try {
+  //     _todayFood = foodName[value];
+  //     await pushCondition("food", value);
+  //   }catch(_){};
+  // }
 
 
   Future<void>  pushCondition( String name , dynamic value )async
@@ -271,81 +271,165 @@ class TTMItem
   }
   //
   // 取得大便量
-  Future<TTMPieConditionValue> getShitMonthList() async
+  Future<void> pushConditionShit( int shit )async
   {
-    int i ;
-    final TTMPieConditionValue ret = new TTMPieConditionValue() ;
+    if( _documentReference == null )
+      throw "no _documentReference " ;
     DateTime dateTime = DateTime.now();
-    String id = "${dateTime.year}-${dateTime.month}" ;
+    String id = "${dateTime.year}-${dateTime.month}-${dateTime.day}" ;
 
-    CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
-    DocumentReference documentReference = await collectionReference.doc( id );
-  //  collectionReference.
-    for( i = 1 ; i <= 31 ; ++i )
-      {
-        try
-        {
+    _todayShit = shitName[shit] ;
+    final Map<String, Object?> updata = {
+      'value': shit,
+      "date": "${dateTime.year}/${dateTime.month}/${dateTime.day}"
+    } ;
 
-          DocumentReference reference = await documentReference.collection( "$i")
-              .doc( "data" );
-          DocumentSnapshot documentSnapshot = await reference.get();
-          Object? object = await documentSnapshot.data() ;
-          if(( object is Map ) == false )
-            throw "err" ;
-          Map map = object as Map ;
-          ret.add(
-            "${ shitName[map['shit']]}" , 1 );
-        }catch( e )
-        {
-
-        }
-      }
+    CollectionReference collectionReference = _documentReference!.collection( "shit" );
 
     //
-    //
+    DocumentReference reference = await collectionReference.doc( id );//.update( updata );
+    try {
+      await reference.update(updata);
+    }catch( e ) {
 
-    return ret ;
-  }
-
-  //
-  //
-  //
-  // 取得大便量
-  Future<TTMPieConditionValue> getFoodMonthList() async
-  {
-    int i ;
-    final TTMPieConditionValue ret = new TTMPieConditionValue() ;
-    DateTime dateTime = DateTime.now();
-    String id = "${dateTime.year}-${dateTime.month}" ;
-
-    CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
-    DocumentReference documentReference = await collectionReference.doc( id );
-    //  collectionReference.
-    for( i = 1 ; i <= 31 ; ++i )
-    {
-      try
-      {
-
-        DocumentReference reference = await documentReference.collection( "$i")
-            .doc( "data" );
-        DocumentSnapshot documentSnapshot = await reference.get();
-        Object? object = await documentSnapshot.data() ;
-        if(( object is Map ) == false )
-          throw "err" ;
-        Map map = object as Map ;
-        ret.add(
-            "${ foodName[map['food']]}" , 1 );
-      }catch( e )
-      {
-
-      }
+      await reference.set(updata);
     }
+  }
 
-    //
-    //
+  Future<Map<String,int>> getShitList() async
+  {
+    Map<String,int> ret = {} ;
+    try {
+      CollectionReference collectionReference = _documentReference!.collection(
+          "shit");
+      QuerySnapshot querySnapshot = await collectionReference.get();
+      List<QueryDocumentSnapshot> queryDocumentSnapshot = querySnapshot.docs ;
+      for( final d in queryDocumentSnapshot ) {
+        try {
 
+          ret[d['date']] = d['value'] ;
+        }catch(__){}
+      }
+
+      //    for (final d : querySnapshot.docs)
+
+    }catch( _ ){}
     return ret ;
   }
+  // Future<TTMPieConditionValue> getShitMonthList() async
+  // {
+  //   int i ;
+  //   final TTMPieConditionValue ret = new TTMPieConditionValue() ;
+  //   DateTime dateTime = DateTime.now();
+  //   String id = "${dateTime.year}-${dateTime.month}" ;
+  //
+  //   CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
+  //   DocumentReference documentReference = await collectionReference.doc( id );
+  // //  collectionReference.
+  //   for( i = 1 ; i <= 31 ; ++i )
+  //     {
+  //       try
+  //       {
+  //
+  //         DocumentReference reference = await documentReference.collection( "$i")
+  //             .doc( "data" );
+  //         DocumentSnapshot documentSnapshot = await reference.get();
+  //         Object? object = await documentSnapshot.data() ;
+  //         if(( object is Map ) == false )
+  //           throw "err" ;
+  //         Map map = object as Map ;
+  //         ret.add(
+  //           "${ shitName[map['shit']]}" , 1 );
+  //       }catch( e )
+  //       {
+  //
+  //       }
+  //     }
+  //
+  //   //
+  //   //
+  //
+  //   return ret ;
+  // }
+  // 進食量
+  Future<void> pushConditionFood( int food )async
+  {
+    if( _documentReference == null )
+      throw "no _documentReference " ;
+    DateTime dateTime = DateTime.now();
+    String id = "${dateTime.year}-${dateTime.month}-${dateTime.day}" ;
+
+    _todayFood = foodName[food] ;
+    final Map<String, Object?> updata = {
+      'value': food,
+      "date": "${dateTime.year}/${dateTime.month}/${dateTime.day}"
+    } ;
+
+    CollectionReference collectionReference = _documentReference!.collection( "food" );
+
+    //
+    DocumentReference reference = await collectionReference.doc( id );//.update( updata );
+    try {
+      await reference.update(updata);
+    }catch( e ) {
+
+      await reference.set(updata);
+    }  }
+
+  Future<Map<String,int>> getFoodList() async
+  {
+    Map<String,int> ret = {} ;
+    try {
+      CollectionReference collectionReference = _documentReference!.collection(
+          "food");
+      QuerySnapshot querySnapshot = await collectionReference.get();
+      List<QueryDocumentSnapshot> queryDocumentSnapshot = querySnapshot.docs ;
+      for( final d in queryDocumentSnapshot ) {
+        try {
+
+          ret[d['date']] = d['value'] ;
+        }catch(__){}
+      }
+
+      //    for (final d : querySnapshot.docs)
+
+    }catch( _ ){}
+    return ret ;
+  }
+  //
+  // 取得進食量
+  // Future<TTMPieConditionValue> getFoodMonthList() async
+  // {
+  //   int i ;
+  //   final TTMPieConditionValue ret = new TTMPieConditionValue() ;
+  //   DateTime dateTime = DateTime.now();
+  //   String id = "${dateTime.year}-${dateTime.month}" ;
+  //
+  //   CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
+  //   DocumentReference documentReference = await collectionReference.doc( id );
+  //   //  collectionReference.
+  //   for( i = 1 ; i <= 31 ; ++i )
+  //   {
+  //     try
+  //     {
+  //
+  //       DocumentReference reference = await documentReference.collection( "$i")
+  //           .doc( "data" );
+  //       DocumentSnapshot documentSnapshot = await reference.get();
+  //       Object? object = await documentSnapshot.data() ;
+  //       if(( object is Map ) == false )
+  //         throw "err" ;
+  //       Map map = object as Map ;
+  //       ret.add(
+  //           "${ foodName[map['food']]}" , 1 );
+  //     }catch( e )
+  //     {
+  //
+  //     }
+  //   }
+  //
+  //   return ret ;
+  // }
   //
   // 活動量
   Future<void> pushConditionActivity( int activity )async
@@ -397,32 +481,52 @@ class TTMItem
   String _todayShit = "" ;
   Future<void>initTodayShit() async
   {
-    try
-    {
-
-      int i ;
-      final TTMPieConditionValue ret = new TTMPieConditionValue() ;
+    Map<String,int> ret = {} ;
+    try {
+      CollectionReference collectionReference = _documentReference!.collection(
+          "shit");
       DateTime dateTime = DateTime.now();
-      String id = "${dateTime.year}-${dateTime.month}" ;
-
-      CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
-      DocumentReference documentReference = await collectionReference.doc( id );
-      //  collectionReference.
-
-
-      DocumentReference reference = await documentReference.collection( "${dateTime.day}")
-          .doc( "data" );
-      DocumentSnapshot documentSnapshot = await reference.get();
+      String key = "${dateTime.year}-${dateTime.month}-${dateTime.day}" ;
+      DocumentSnapshot documentSnapshot = await collectionReference.doc(key).get();
       Object? object = await documentSnapshot.data() ;
       if(( object is Map ) == false )
         throw "err" ;
 
       Map map = object as Map ;
-      _todayShit = shitName[map['shit']]   ;
-    }catch( e )
-    {
+      _todayShit = shitName[ int.parse( map['value'].toString()) ];
 
-    }
+//      List<QueryDocumentSnapshot> queryDocumentSnapshot = querySnapshot.docs ;
+
+
+      //    for (final d : querySnapshot.docs)
+
+    }catch( _ ){}
+    // try
+    // {
+    //
+    //   int i ;
+    //   final TTMPieConditionValue ret = new TTMPieConditionValue() ;
+    //   DateTime dateTime = DateTime.now();
+    //   String id = "${dateTime.year}-${dateTime.month}" ;
+    //
+    //   CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
+    //   DocumentReference documentReference = await collectionReference.doc( id );
+    //   //  collectionReference.
+    //
+    //
+    //   DocumentReference reference = await documentReference.collection( "${dateTime.day}")
+    //       .doc( "data" );
+    //   DocumentSnapshot documentSnapshot = await reference.get();
+    //   Object? object = await documentSnapshot.data() ;
+    //   if(( object is Map ) == false )
+    //     throw "err" ;
+    //
+    //   Map map = object as Map ;
+    //   _todayShit = shitName[map['shit']]   ;
+    // }catch( e )
+    // {
+    //
+    // }
 
 
     //
@@ -435,38 +539,31 @@ class TTMItem
   String _todayFood = "" ;
   Future<void>initTodayFood() async
   {
-    try
-    {
-
-      int i ;
-      final TTMPieConditionValue ret = new TTMPieConditionValue() ;
+    Map<String,int> ret = {} ;
+    try {
+      CollectionReference collectionReference = _documentReference!.collection(
+          "food");
       DateTime dateTime = DateTime.now();
-      String id = "${dateTime.year}-${dateTime.month}" ;
-
-      CollectionReference collectionReference = _documentReference!.collection( TTMCondition.DIR ) ;
-      DocumentReference documentReference = await collectionReference.doc( id );
-      //  collectionReference.
-
-
-      DocumentReference reference = await documentReference.collection( "${dateTime.day}")
-          .doc( "data" );
-      DocumentSnapshot documentSnapshot = await reference.get();
+      String key = "${dateTime.year}-${dateTime.month}-${dateTime.day}" ;
+      DocumentSnapshot documentSnapshot = await collectionReference.doc(key).get();
       Object? object = await documentSnapshot.data() ;
       if(( object is Map ) == false )
         throw "err" ;
 
       Map map = object as Map ;
-      _todayFood = foodName[map['food']]   ;
-    }catch( e )
-    {
+      _todayFood = foodName[ int.parse( map['value'].toString()) ];
 
-    }
+//      List<QueryDocumentSnapshot> queryDocumentSnapshot = querySnapshot.docs ;
+
+
+      //    for (final d : querySnapshot.docs)
+
+    }catch( _ ){}
 
 
     //
   }
   String get todayFood => _todayFood ;
-
 
 
   //

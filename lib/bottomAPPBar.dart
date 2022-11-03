@@ -6,14 +6,6 @@ import 'package:animal_app/matchPage.dart';
 import 'package:animal_app/recordPage.dart';
 import 'package:animal_app/mapPage.dart';
 import 'package:animal_app/linkPage.dart';
-import 'package:animal_app/record_page_item/add_expense.dart';
-import 'package:animal_app/record_page_item/add_vaccine.dart';
-import 'package:animal_app/record_page_item/add_doctor.dart';
-import 'package:animal_app/record_page_item/condition.dart';
-import 'package:animal_app/record_page_item/weight_record.dart';
-import 'package:animal_app/record_page_item/shit_record.dart';
-import 'package:animal_app/record_page_item/activity_record.dart';
-import 'package:animal_app/record_page_item/diet_record.dart';
 
 class BottomAPPBar extends StatefulWidget {
   int i = 0;

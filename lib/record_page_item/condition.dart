@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../main.dart';
 import '../MM/MM.dart';
 import '../MM/MMWidget.dart';
 import '../MM/MMWidgetSelect.dart';
@@ -24,13 +25,18 @@ class Condition extends StatelessWidget{
   Widget build(BuildContext context) {
 
     //
-    Widget body = MM.newScroll(
-       MM.newColumn([
+    Widget body = Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+       child:
+       MM.newColumn(
+           [
         WeightCard(this.item, pieCondition.getDatas(0)),
         ShitCard(this.item, pieCondition.getDatas(1)),
         ActivityCard(this.item,pieCondition.getDatas(2)),
         DietCard( this.item , pieCondition.getDatas(3)),
-      ]));
+      ],
+
+       ));
       
       //
     body = Padding(padding: EdgeInsets.all( 20 ) ,

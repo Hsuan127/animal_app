@@ -31,7 +31,7 @@ class _RecordPageState extends State<RecordPage>{
   Widget build(BuildContext context)
   {
     HYSizeFit.initialize(context);
-    Widget c = Text( "not login ... " );
+    Widget c = Text( "尚未登入... " );
     if( _auth.currentUser != null )
       c = Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,22 +132,27 @@ class _RecordPageState extends State<RecordPage>{
     {
 
       TTMItem item = _user.getAt( _selectedIndex );
-      return Column( children: [
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
         // --------------------------------------------
         // 名稱
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
             child: Text(item.name ,
-                style: TextStyle(fontSize: 20,)
+                style: TextStyle(fontSize: 20, backgroundColor: Colors.amber)
             ),
           ),
         ),
+          SizedBox(
+            height: 10,
+          ),
         // --------------------------------------------
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            child: Text('總花費',
+            child: Text('本月總花費',
                 style: TextStyle(fontSize: 20,)
             ),
           ),
@@ -166,7 +171,7 @@ class _RecordPageState extends State<RecordPage>{
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            child: Text('下個月預計花費',
+            child: Text('下個月日常性花費預估',
                 style: TextStyle(color: Colors.grey[600], fontSize: 12)
             ),
           ),
@@ -178,6 +183,9 @@ class _RecordPageState extends State<RecordPage>{
         ExpectCard(
             expectation:  "\$ ${item.nextMoney}"
         ),
+          SizedBox(
+            height: 10,
+          ),
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
@@ -186,16 +194,20 @@ class _RecordPageState extends State<RecordPage>{
             ),
           ),
         ),
+          SizedBox(
+            height: 10,
+          ),
         HealthCondition( _user ,  _user.getAt( _selectedIndex )),
 
-      ],);
+      ],
+      );
 
     }catch( e )
     {
       if( _auth.currentUser == null )
-        return Text( "not login.." );
+        return Text( "尚未登入..." );
       if( _isLoading )
-        return Text( "loading... " );
+        return Text( "努力加載紀錄中..." );
       return Text( "error:$e" );
     }
   }
@@ -333,7 +345,7 @@ class _RecordPageState extends State<RecordPage>{
     try
     {
 
-      MM.ShowEditDialog( context , "" , Text( "請輸入寵物名稱" ) , (text)
+      MM.ShowEditDialog( context , "" , Text( "您的毛寶貝大名？" ) , (text)
       {
         if( text is String )
           _onAdd( text );
@@ -361,7 +373,7 @@ class _RecordPageState extends State<RecordPage>{
       };
       //
       MM.ShowDialog( context
-          , Text( "是否要移除：${item.name}" )
+          , Text( "確定要刪除 ${item.name} 的資料嗎？" )
           , null
           , ()=>removeCallback()
           , true

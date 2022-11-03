@@ -1,5 +1,5 @@
 
-// 體重紀錄
+// 大便紀錄
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -9,6 +9,7 @@ import '../MM/MM.dart' ;
 import '../MM/MMColor.dart';
 import '../TTM/TTMItem.dart';
 import '../TTM/TTMPieCondition.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 
@@ -109,7 +110,7 @@ class _ShitCardStateView extends State<ShitCardStateView>
   Future<void> _initData()async
   {
     _isLoading = true ;
-    _dateSet = await item.getShitMonthList();
+    _dateSet = await item.getShitList();
     _isLoading = false ;
     setState((){}) ;
   }
@@ -132,79 +133,213 @@ class _ShitCardStateView extends State<ShitCardStateView>
   }
   // 圖餅圖
   int _touchedIndex = 0 ;
-  Widget _initPie()
+  Widget _initPie() {
+    return Expanded(
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: _initCalender(), //Text( "test")
+      ),
+    );
+  }
+    // 載入中，不用線圖
+  //   if( _isLoading )
+  //     return  Column( children:[
+  //       SizedBox( height : 20 ),
+  //       Text( "載入中" ),
+  //       CircularProgressIndicator()
+  //
+  //     ] );
+  //   Widget ret = AspectRatio(
+  //       aspectRatio: 1,
+  //       child: PieChart(
+  //         PieChartData(
+  //             pieTouchData: PieTouchData(touchCallback:
+  //                 (FlTouchEvent event, pieTouchResponse) {
+  //               setState(() {
+  //                 if (!event.isInterestedForInteractions ||
+  //                     pieTouchResponse == null ||
+  //                     pieTouchResponse.touchedSection == null) {
+  //                   _touchedIndex = -1;
+  //                   return;
+  //                 }
+  //                 _touchedIndex = pieTouchResponse
+  //                     .touchedSection!.touchedSectionIndex;
+  //               });
+  //             }),
+  //             startDegreeOffset: 180,
+  //             borderData: FlBorderData(
+  //               show: false,
+  //             ),
+  //             sectionsSpace: 1,
+  //             centerSpaceRadius: 0,
+  //             sections: _initDataSet()),
+  //       ),
+  //     )  ;
+  //   final double size = 80.piw ;
+  //   return SizedBox( child:  ret , width: size , height : size ,);
+  //
+  // }
+  //
+  //   //
+  // TTMPieConditionValue _dateSet = TTMPieConditionValue() ;
+  // final List<Color> _dataColor = MMColor.dataColor  ;
+  //
+  //
+  //   // 建資料
+  // List<PieChartSectionData> _initDataSet()
+  // {
+  //
+  //   final List<dynamic> value = _dateSet.toValues();
+  //   final List<String> keys = _dateSet.toKeys();
+  //
+  //   return List.generate(
+  //       keys.length ,
+  //           (i) {
+  //         bool isTouched = ( i == _touchedIndex );
+  //         Color color = _dataColor[i] ;
+  //         return PieChartSectionData(
+  //           color: color ,
+  //           value: value[i].toDouble() ,
+  //           title: keys[i] ,
+  //           radius: 120,
+  //           titleStyle: const TextStyle(
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.bold,
+  //               color: Color(0xff0c7f55)),
+  //           titlePositionPercentageOffset: 0.55,
+  //           borderSide: isTouched
+  //               ? BorderSide(color: color, width: 6)
+  //               : BorderSide(color: color.withOpacity(0)),
+  //         );
+  //       });
+  Map<String,int>_dateSet = {} ;
+
+  final List<Color> _dataColor = MMColor.dataColor  ;
+  // 初始日曆
+
+  Widget _initCalender()
   {
 
-    // 載入中，不用線圖
-    if( _isLoading )
-      return  Column( children:[
-        SizedBox( height : 20 ),
-        Text( "載入中" ),
-        CircularProgressIndicator()
-
-      ] );
-    Widget ret = AspectRatio(
-        aspectRatio: 1,
-        child: PieChart(
-          PieChartData(
-              pieTouchData: PieTouchData(touchCallback:
-                  (FlTouchEvent event, pieTouchResponse) {
-                setState(() {
-                  if (!event.isInterestedForInteractions ||
-                      pieTouchResponse == null ||
-                      pieTouchResponse.touchedSection == null) {
-                    _touchedIndex = -1;
-                    return;
-                  }
-                  _touchedIndex = pieTouchResponse
-                      .touchedSection!.touchedSectionIndex;
-                });
-              }),
-              startDegreeOffset: 180,
-              borderData: FlBorderData(
-                show: false,
-              ),
-              sectionsSpace: 1,
-              centerSpaceRadius: 0,
-              sections: _initDataSet()),
-        ),
-      )  ;
-    final double size = 80.piw ;
-    return SizedBox( child:  ret , width: size , height : size ,);
-
-  }
 
     //
-  TTMPieConditionValue _dateSet = TTMPieConditionValue() ;
-  final List<Color> _dataColor = MMColor.dataColor  ;
+    //
+    Widget ret = TableCalendar(
+      firstDay: DateTime.utc(2010, 10, 16),
+      lastDay: DateTime.utc(2030, 3, 14),
+      focusedDay: DateTime.now(),
+      daysOfWeekHeight: 48,
+//      rowHeight: 52,
+      locale: 'zh_TW',
+      availableCalendarFormats: const {
+        CalendarFormat.month: 'Month',
+      },
 
+      calendarBuilders:  CalendarBuilders(
+        outsideBuilder: ( context,  day , _ ) // 今天
+        {
+          return _buildCalendarDay( day.day.toString()
+              , Colors.white
+              , Colors.black54
+              , Colors.transparent )
+          ;
+        },
+        todayBuilder: ( context,  day , _ ) // 今天
+        {
+          return _buildCalendar( day );
+        },
 
-    // 建資料
-  List<PieChartSectionData> _initDataSet()
+        defaultBuilder: ( context,  day , _ ) // 今天
+        {
+          return _buildCalendar( day );
+        },
+      ),
+
+      //    holidays: _holidays ,
+    );
+    if (false)
+      ret = SizedBox(
+        child: ret,
+        width: 200,
+      );
+    //  ret = Padding( child: ret , padding: EdgeInsets.only( left: 20 , right: 20 ),);
+    ret = MM.newScroll(ret);
+    return ret;
+  }
+
+  //
+  String dateToStr( DateTime day )
+  {
+    return "${day.year}/${day.month}/${day.day}" ;
+  }
+
+  //
+  Container _buildCalendar( DateTime day )
   {
 
-    final List<dynamic> value = _dateSet.toValues();
-    final List<String> keys = _dateSet.toKeys();
+    try {
+      String dayStr = dateToStr( day );
+      int value = _dateSet[dayStr] as int ;
+      return _buildCalendarDay(day.day.toString()
+          , _dataColor[value]
+          , Colors.black
+          , Colors.black54);
+    }catch(_)
+    {
+      return _buildCalendarDay(day.day.toString()
+          , Colors.white
+          , Colors.black
+          , Colors.white);
 
-    return List.generate(
-        keys.length ,
-            (i) {
-          bool isTouched = ( i == _touchedIndex );
-          Color color = _dataColor[i] ;
-          return PieChartSectionData(
-            color: color ,
-            value: value[i].toDouble() ,
-            title: keys[i] ,
-            radius: 120,
-            titleStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff0c7f55)),
-            titlePositionPercentageOffset: 0.55,
-            borderSide: isTouched
-                ? BorderSide(color: color, width: 6)
-                : BorderSide(color: color.withOpacity(0)),
-          );
-        });
+    }
+  }
+  //
+
+  Container _buildCalendarDay(
+      String day,
+      Color backColor ,
+      Color color,
+      Color borderColor ,
+      ) {
+
+    return Container(
+      //    color: backColor,
+      width: 48,
+      height: 48,
+      decoration: new BoxDecoration(
+        //背景
+        color: backColor ,
+        borderRadius: BorderRadius.all(Radius.circular(24.0)),
+        border: new Border.all(width: 1, color: borderColor ),
+      ),
+      //border: new Border.all(width: 1, color: Colors.red),
+      child: Center(
+        child: Text(day,
+            style: TextStyle(fontSize: 12, color: color )),
+      ),
+    );
+  }
+
+  AnimatedContainer buildCalendarDayMarker(
+      String text ,
+      Color backColor,
+      ) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: backColor,
+      ),
+      width: 52,
+      height: 13,
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle().copyWith(
+            color: Colors.white,
+            fontSize: 10.0,
+          ),
+        ),
+      ),
+    );
   }
 }

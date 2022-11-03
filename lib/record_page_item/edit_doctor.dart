@@ -318,7 +318,7 @@ class _EditDoctor extends State<EditDoctor> {
       //   final TextEditingController _descriptionController = TextEditingController();
       await TTMDoctor( 0 , _hospitalController.text , _problemController.text ,  DateTime.parse( _dateController.text ),
           _descriptionController.text , false , _doctor.snapshot ).upDate();
-      MM.MessageBox( context , "OK" ).then((_)
+      MM.MessageBox( context , "更新成功" ).then((_)
       => Navigator.of(context).pop() );
 
     }catch( e )
@@ -333,7 +333,7 @@ class _EditDoctor extends State<EditDoctor> {
     try
     {
       await _doctor.del();
-      MM.MessageBox( context , "OK" ).then((_)
+      MM.MessageBox( context , "刪除成功" ).then((_)
       => Navigator.of(context).pop() );
 
     }catch(_){};

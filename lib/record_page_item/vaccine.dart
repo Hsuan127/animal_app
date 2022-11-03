@@ -325,7 +325,7 @@ class _VaccinePageState extends State<VaccinePage>{
     body = Padding( padding: EdgeInsets.all(10.piw), child :body);
     //
     return Scaffold(
-
+      resizeToAvoidBottomInset: false ,
       appBar:  AppBar(title: Text('疫苗施打'),
       centerTitle: true ,),
  /*

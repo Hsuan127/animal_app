@@ -115,7 +115,7 @@ class MM
           actions: <Widget>[
             if( isYes )
               ElevatedButton(
-                child: Text(MM.strOk(context)),
+                child: Text("確認"),
                 onPressed: () {
                   Navigator.of(context).pop();
                   if (null != onPressed) onPressed();
@@ -124,7 +124,7 @@ class MM
 
             if( isNo )
               ElevatedButton(
-                child: Text(MM.strCancel(context)),
+                child: Text("取消"),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -156,7 +156,7 @@ class MM
           ),
           actions: <Widget>[
             ElevatedButton(
-              child: Text(inOkStr ?? MM.strOk(context)),
+              child: Text(inOkStr ?? "確認"),
               onPressed: () {
                 Navigator.of(context).pop();
                 if (null != callback) callback();
@@ -169,7 +169,7 @@ class MM
   }
 
 
-  // 多國語語
+  // 多國語
   static String strOk(context) {
     return MaterialLocalizations.of(context).okButtonLabel;
   }
@@ -275,7 +275,7 @@ class MM
           ),
           actions: <Widget>[
             ElevatedButton(
-              child: Text(MM.strOk(context)),
+              child: Text("確認"),
               onPressed: () {
                 // test
                 final String text = input.text.trim() ;
@@ -297,7 +297,7 @@ class MM
               },
             ),
             ElevatedButton(
-              child: Text(MM.strCancel(context)),
+              child: Text("取消"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -312,8 +312,10 @@ class MM
 
   ///
   static Widget newColumn(List<Widget> inList,
-      [MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
-        CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center]) {
+      [
+        MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceEvenly,
+        CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center
+      ]) {
     return Column(
       children: inList,
       mainAxisAlignment: mainAxisAlignment,
