@@ -31,7 +31,7 @@ Container signInSignUpButton(
         onTap();
       },
       child: Text(
-        isLogin ? 'LOG IN' : 'SIGN UP',
+        isLogin ? '登入' : '註冊',
         style: const TextStyle(
             color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 16),
       ),
