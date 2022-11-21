@@ -68,24 +68,15 @@ class _MatchPageState extends State<MatchPage> {
               leading: CircleAvatar(child: Icon(Icons.notifications)),
               title: Text('推播通知開關'),
               onTap: () {
-                // _onItemClick(0);
-                Navigator.pushNamed(context, '/matchPage/matchFilterPage'); //篩選-頁面切換(左上角有返回鍵)
+
               },
             ),
-            //使用手冊
-            /*ListTile(
-              leading: CircleAvatar(child: Icon(Icons.menu_book)),
-              title: Text('使用手冊'),
-              onTap: () {
-                // _onItemClick(1);
-              },
-            ),*/
             //修改密碼
             ListTile(
               leading: new CircleAvatar(child: Icon(Icons.password)),
               title: Text('修改密碼'),
               onTap: () {
-                // _onItemClick(2);
+
               },
             ),
             //登出
@@ -93,7 +84,7 @@ class _MatchPageState extends State<MatchPage> {
               leading: CircleAvatar(child: Icon(Icons.logout)),
               title: Text('登出'),
               onTap: () {
-                // _onItemClick(0);
+
               },
             ),
           ],
