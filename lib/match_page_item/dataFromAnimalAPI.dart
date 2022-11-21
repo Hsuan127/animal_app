@@ -116,7 +116,7 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                 : Drag(animal: animals_drag[1]),
                             screenWidth: MediaQueryData.fromWindow(window).size.width, //375
                             outValue: 0.8,
-                            dragSpeed: 1000,
+                            dragSpeed: 2000,
                             onChangeDragDistance: (distance) {
                               /// {distance: 0.17511112467447917, distanceProgress: 0.2918518744574653}
                               // print(distance.toString());
@@ -132,8 +132,8 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                 //底部提示訊息
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        width: 250,
-                                        backgroundColor: Colors.black12,
+                                        width: MediaQueryData.fromWindow(window).size.width / 2,
+                                        backgroundColor: Colors.white12,
                                         duration: Duration(seconds: 1),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
@@ -208,7 +208,8 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                               completeTag: 'custom_left');
                                       }),
 
-                                  SizedBox(width: 20),
+                                  //提示動物圖片可左右滑
+                                  CircleAvatar(child: Icon(Icons.swipe, color: Colors.white), backgroundColor: Color(0x7F808080),),
 
                                   //右滑按鈕
                                   ElevatedButton(
@@ -240,9 +241,9 @@ class _DataFromAnimalAPIState extends State<DataFromAnimalAPI> {
                                           //底部提示訊息
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                                  width: 250,
+                                                  width: MediaQueryData.fromWindow(window).size.width / 2, //250
                                                   backgroundColor:
-                                                      Colors.black12,
+                                                      Colors.white12,
                                                   duration:
                                                       Duration(seconds: 1),
                                                   shape: RoundedRectangleBorder(

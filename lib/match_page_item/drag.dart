@@ -102,7 +102,7 @@ class _DragState extends State<Drag> {
                             ],
                           ),
                           //我要認養
-                          ElevatedButton(
+                          ElevatedButton.icon(
                             style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.orange),
@@ -115,10 +115,8 @@ class _DragState extends State<Drag> {
                               padding:
                                   MaterialStateProperty.all(EdgeInsets.all(8)),
                             ),
-                            child: Text(
-                              "我要認養",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            icon: Icon(Icons.ads_click, color: Colors.white,),
+                            label: Text("我要認養", style: TextStyle(color: Colors.white),),
                             onPressed: () {
                               launchUrlString(
                                   "https://asms.coa.gov.tw/Amlapp/App/AnnounceList.aspx?Id=${widget.animal.id}&AcceptNum=${widget.animal.subid}&PageType=Adopt",
@@ -181,7 +179,7 @@ class _DragState extends State<Drag> {
                             children: [
                               //地圖
                               IconButton(
-                                  icon: Icon(Icons.location_on, color: Colors.orange),
+                                  icon: CircleAvatar(child: Icon(Icons.location_on, color: Colors.white), backgroundColor: Colors.orange,),
                                   onPressed: (() {
                                     launchUrlString(
                                         "https://www.google.com/maps/search/?api=1&query=${widget.animal.shelterAddress}",
@@ -189,7 +187,7 @@ class _DragState extends State<Drag> {
                                   })),
                               //電話
                               IconButton(
-                                  icon: Icon(Icons.call, color: Colors.orange),
+                                  icon: CircleAvatar(child: Icon(Icons.call, color: Colors.white), backgroundColor: Colors.orange,),
                                   onPressed: (() {
                                     launchUrlString(
                                         "tel:${widget.animal.shelterTel}");
