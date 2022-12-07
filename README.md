@@ -18,3 +18,4 @@ samples, guidance on mobile development, and a full API reference.
 ## Flutter SDK
 
 SDK version：3.3.1
+NDK version：21.3.6528147
